@@ -1,4 +1,3 @@
-import fabric
 import os 
 import  threading
 from tkinter import *
