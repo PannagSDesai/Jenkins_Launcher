@@ -7,22 +7,28 @@ import sys
 import os
 import subprocess
 
+""""The script helps you to launch the Jenkins withour having to navigate to the war file path and launching there from the CMD with the help of command, 
+Rather quickly launch it with the help of predefined workflow sophisticated enough to automate the launching process. Depending on your setup, you may ha
+-ve to change the path of .war file. The jenkins will be launched on your default browser with new tab. The Window can be minimised to taskbar ( Need to workout to
+check if possible to minimise it to notification center in Windows 10."""
+
 def Run_War():
-    #os.system('java -jar \"C:\Program Files\Jenkins\jenkins.war" > Xmp.txt')
-    output = subprocess.Popen('java -jar \"C:\Program Files\Jenkins\jenkins.war"',stdout=subprocess.PIPE).communicate()[0]
+     #Run the war file with regular command with the help of subpocess, 
+     #NOTE: CHange the path if war file exists somewhere else on your system.
+     output = subprocess.Popen('java -jar \"C:\Program Files\Jenkins\jenkins.war"',stdout=subprocess.PIPE).communicate()[0] 
     
 
-#S = os.system('java -jar \"C:\Program Files\Jenkins\jenkins.war\"')
-
 def browser_open():
+    #Open browser after 20 seconds to ensure the jenkins is up.
+    #Anyone who knows how to log live strings from the command console output can modify the code to add feature of launching jenkins on browser only when jenkins is fully up.
     time.sleep(20)
     w.configure(text="Launched")
-    os.system('python -m webbrowser -t ""http://localhost:8080""')
-
-def disable_event():
+    os.system('python -m webbrowser -t ""http://localhost:8080""') #Launching Jenkins in dafault browser with the help of system using regular command.
+    
+def disable_event():  # Bypass "X" button event from the Title bar.
         pass
 
-def Window_generator():
+def Window_generator(): #Window designer and launcher, you can customise as per your convenience.
     global root
     global w
     root = Tk()
@@ -39,10 +45,11 @@ def Window_generator():
     root.mainloop()
     time.sleep(20)
     w.configure(text='Launched')
+    
+#Threading will be used as Tkinter window may become unresponsive when Run_war doesn't return anything.
 
-threads = []
-worker = threading.Thread(target=Run_War,args=(),)
+worker = threading.Thread(target=Run_War,args=(),)          #Create thread for running war file 
 worker.start()
-window = threading.Thread(target=Window_generator,args=(),)
+window = threading.Thread(target=Window_generator,args=(),)   #Create thread for window generator.
 window.start()
-browser = threading.Thread(target=browser_open(), args=(),)
+browser = threading.Thread(target=browser_open(), args=(),)    #create thread for browser.
